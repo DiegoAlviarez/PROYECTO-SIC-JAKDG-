@@ -154,8 +154,13 @@ elif menu_principal == "Comparativa":
         fig = crear_grafico_comparacion(data, [jugador1, jugador2])
         st.plotly_chart(fig, use_container_width=True)
         
-        # Tabla comparativa
+        # Convertir las URLs en imágenes para la tabla
+    data_con_imagenes = convertir_urls_a_imagenes(data)
+
+
         st.subheader("Comparación Detallada")
+        st.write("Tabla con imágenes de los jugadores y valores de mercado.")
+        st.markdown(data_con_imagenes.to_html(escape=False), unsafe_allow_html=True)
         comp_data = data[data['Nombre'].isin([jugador1, jugador2])]
         st.dataframe(
             comp_data,
@@ -171,14 +176,7 @@ elif menu_principal == "Comparativa":
             },
             hide_index=True
         )
-        # Convertir las URLs en imágenes para la tabla
-    data_con_imagenes = convertir_urls_a_imagenes(data)
-
-    # Mostrar la tabla con imágenes de los jugadores
-    with st.container():
-        st.subheader("Datos de Jugadores")
-        st.write("Tabla con imágenes de los jugadores y valores de mercado.")
-        st.markdown(data_con_imagenes.to_html(escape=False), unsafe_allow_html=True)
+        
 
 else:  # Datos
     st.title("Datos Completos")
