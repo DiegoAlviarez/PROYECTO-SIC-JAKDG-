@@ -171,6 +171,14 @@ elif menu_principal == "Comparativa":
             },
             hide_index=True
         )
+        # Convertir las URLs en imágenes para la tabla
+    data_con_imagenes = convertir_urls_a_imagenes(data)
+
+    # Mostrar la tabla con imágenes de los jugadores
+    with st.container():
+        st.subheader("Datos de Jugadores")
+        st.write("Tabla con imágenes de los jugadores y valores de mercado.")
+        st.markdown(data_con_imagenes.to_html(escape=False), unsafe_allow_html=True)
 
 else:  # Datos
     st.title("Datos Completos")
