@@ -48,9 +48,6 @@ def load_data():
 # Cargar datos
 data = load_data()
 
-# Convertir las URLs en imágenes para la tabla
-data_con_imagenes = convertir_urls_a_imagenes(data)
-
 # Menú principal usando option_menu
 with st.sidebar:
     st.title("⚽ Análisis Futbolístico")
