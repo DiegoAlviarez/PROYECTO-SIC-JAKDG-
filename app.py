@@ -4,8 +4,6 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import requests
 from streamlit_lottie import st_lottie
-from streamlit_option_menu import option_menu
-from streamlit_extras.metric_cards import style_metric_cards
 
 # Configuración inicial de la página
 st.set_page_config(
@@ -79,27 +77,6 @@ def convertir_urls_a_imagenes(df):
             df_copy[col] = df_copy[col].apply(lambda url: f'<img src="{url}" width="50">' if isinstance(url, str) and url.startswith('http') else url)
     return df_copy
 
-# Función para generar valores mensuales interpolados
-def generar_valores_mensuales(valor_inicial, valor_final):
-    fecha_inicio = datetime(2024, 1, 1)
-    fecha_actual = datetime.now()
-    meses = []
-    valores = []
-    
-    fecha_actual = fecha_actual.replace(day=1)
-    fecha = fecha_inicio
-    while fecha <= fecha_actual:
-        meses.append(fecha.strftime('%B %Y'))
-        fecha += timedelta(days=32)
-        fecha = fecha.replace(day=1)
-    
-    num_meses = len(meses)
-    for i in range(num_meses):
-        valor = valor_inicial + (valor_final - valor_inicial) * (i / (num_meses - 1))
-        valores.append(valor)
-    
-    return meses, valores
-
 # Cargar datos
 data = load_data()
 data["Valor de Mercado en 01/01/2024"] = data["Valor de Mercado en 01/01/2024"].apply(convertir_valor)
@@ -150,22 +127,6 @@ elif menu_principal == "Objetivos":
         </div>
     """, unsafe_allow_html=True)
 
-elif menu_principal == "Metodología":
-    # Aquí sigue la lógica para la sección de "Metodología" que ya tenías.
-    pass
-
-elif menu_principal == "Herramientas":
-    # Aquí sigue la lógica para la sección de "Herramientas" que ya tenías.
-    pass
-
-elif menu_principal == "Resultados":
-    # Aquí sigue la lógica para la sección de "Resultados" que ya tenías.
-    pass
-
-elif menu_principal == "Conclusiones":
-    # Aquí sigue la lógica para la sección de "Conclusiones" que ya tenías.
-    pass
-
 # Footer
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
@@ -174,4 +135,5 @@ st.sidebar.markdown("""
         CON EL VALOR DE MERCADO DE LOS JUGADORES DE FUTBOL EN ESPAÑA</small>
     </div>
 """, unsafe_allow_html=True)
+
 
