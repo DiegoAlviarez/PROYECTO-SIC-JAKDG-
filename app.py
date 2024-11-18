@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import requests
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
-from streamlit_particles import particles
 import hydralit_components as hc
 from streamlit_card import card
 from streamlit_extras.metric_cards import style_metric_cards
@@ -51,28 +50,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-# Configuración de partículas para el fondo
-def load_particles():
-    particles(
-        options={
-            "particles": {
-                "number": {"value": 30, "density": {"enable": True, "value_area": 800}},
-                "color": {"value": "#ffffff"},
-                "shape": {"type": "circle"},
-                "opacity": {"value": 0.3},
-                "size": {"value": 3},
-                "line_linked": {
-                    "enable": True,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": {"enable": True, "speed": 2}
-            }
-        }
-    )
 
 # Función para cargar animaciones Lottie
 def load_lottieurl(url):
@@ -129,9 +106,6 @@ def generar_valores_mensuales(valor_inicial, valor_final):
 data = load_data()
 data["Valor de Mercado en 01/01/2024"] = data["Valor de Mercado en 01/01/2024"].apply(convertir_valor)
 data["Valor de Mercado Actual"] = data["Valor de Mercado Actual"].apply(convertir_valor)
-
-# Cargar partículas en el fondo
-load_particles()
 
 # Menú principal mejorado
 with st.sidebar:
@@ -244,7 +218,6 @@ elif menu_principal == "Metodología":
                     datos_jugador = data[data['Nombre'] == jugador]
                     valor_inicial = datos_jugador['Valor de Mercado en 01/01/2024'].iloc[0]
                     valor_final = datos_jugador['Valor de Mercado Actual'].iloc[0]
-                    
                     meses, valores = generar_valores_mensuales(valor_inicial, valor_final)
                     
                     fig.add_trace(go.Scatter(
@@ -257,7 +230,7 @@ elif menu_principal == "Metodología":
                     ))
                 
                 fig.update_layout(
-                    title='Comparación de Evolución Mensual del Valor de Mercado',
+                    title='Comparación de Valores de Mercado',
                     xaxis_title='Mes',
                     yaxis_title='Valor de Mercado (€)',
                     hovermode='x unified',
@@ -267,155 +240,83 @@ elif menu_principal == "Metodología":
                     font=dict(color='white')
                 )
                 st.plotly_chart(fig)
-        
-        elif visualizacion == "Tendencias Generales":
-            st.subheader("Tendencias Generales del Mercado")
-            
-            fig = go.Figure()
-            for _, jugador in data.iterrows():
-                valor_inicial = jugador['Valor de Mercado en 01/01/2024']
-                valor_final = jugador['Valor de Mercado Actual']
-                
-                meses, valores = generar_valores_mensuales(valor_inicial, valor_final)
-                
-                fig.add_trace(go.Scatter(
-                    x=meses,
-                    y=valores,
-                    mode='lines',
-                    name=jugador['Nombre'],
-                    opacity=0.5
-                ))
-            
-            fig.update_layout(
-                title='Tendencias Generales del Valor de Mercado',
-                xaxis_title='Mes',
-                yaxis_title='Valor de Mercado (€)',
-                hovermode='x unified',
-                showlegend=True,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='white')
-            )
-            st.plotly_chart(fig)
-        st.markdown('</div>', unsafe_allow_html=True)
 
+        st.markdown('</div>', unsafe_allow_html=True)
 elif menu_principal == "Objetivos":
-    st.title("Objetivos del Proyecto")
-    
+    st.title("Objetivos")
+
     with st.container():
         st.markdown("""
         <div class="glass-container">
-            <h3>Objetivos Principales:</h3>
+            <h3>Objetivo General</h3>
+            <p>Analizar los valores de mercado de los jugadores y su evolución en el tiempo, 
+            para ofrecer insights relevantes para clubes, agentes y fanáticos del fútbol.</p>
+            <h3>Objetivos Específicos</h3>
             <ul>
-                <li>Analizar y visualizar el valor de mercado de los jugadores</li>
-                <li>Evaluar el incremento porcentual del valor de mercado a lo largo del tiempo</li>
-                <li>Identificar patrones y tendencias en la valoración de jugadores</li>
+                <li>Visualizar la evolución del valor de mercado de jugadores individuales.</li>
+                <li>Comparar el rendimiento económico entre diferentes jugadores.</li>
+                <li>Identificar tendencias generales en los valores del mercado futbolístico.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
 elif menu_principal == "Herramientas":
-    st.title("Herramientas y Tecnologías")
-    
-    col1, col2 = st.columns(2)
-    with col1:
+    st.title("Herramientas")
+
+    with st.container():
         st.markdown("""
         <div class="glass-container">
-            <h3>Tecnologías Principales</h3>
+            <h3>Herramientas Utilizadas</h3>
             <ul>
-                <li>Python</li>
-                <li>Pandas</li>
-                <li>Streamlit</li>
-                <li>Plotly</li>
-                <li>Google Colab</li>
-                <li>Jupiter Notebook</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class="glass-container">
-            <h3>Bibliotecas Adicionales</h3>
-            <ul>
-                <li>Matplotlib</li>
-                <li>Seaborn</li>
-                <li>Streamlit-Lottie</li>
+                <li><strong>Python</strong>: Lenguaje de programación principal.</li>
+                <li><strong>Streamlit</strong>: Framework para la creación de aplicaciones web interactivas.</li>
+                <li><strong>Pandas</strong>: Para la manipulación y análisis de datos.</li>
+                <li><strong>Plotly</strong>: Para la visualización gráfica avanzada.</li>
+                <li><strong>Requests</strong>: Para la obtención de datos externos.</li>
+                <li><strong>Lottie Animations</strong>: Para mejorar la experiencia visual de la aplicación.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
 elif menu_principal == "Resultados":
     st.title("Resultados")
-    
-    tab1, tab2, tab3 = st.tabs(["Estadísticas Generales", "Análisis de Tendencias", "Recomendaciones"])
-    
-    with tab1:
-        with st.container():
-            st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-            st.header("Estadísticas Generales")
-            st.write("Estadísticas descriptivas de los valores de mercado:")
-            st.dataframe(data[['Valor de Mercado en 01/01/2024', 'Valor de Mercado Actual']].describe())
-            st.markdown('</div>', unsafe_allow_html=True)
-    
-    with tab2:
-        with st.container():
-            st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-            st.header("Análisis de Tendencias")
-            fig = go.Figure()
-            fig.add_trace(go.Box(
-                y=data['Valor de Mercado en 01/01/2024'],
-                name='Enero 2024'
-            ))
-            fig.add_trace(go.Box(
-                y=data['Valor de Mercado Actual'],
-                name='Actual'
-            ))
-            fig.update_layout(
-                title='Distribución de Valores de Mercado',
-                yaxis_title='Valor de Mercado (€)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='white')
-            )
-            st.plotly_chart(fig)
-            st.markdown('</div>', unsafe_allow_html=True)
-    
-    with tab3:
-        with st.container():
-            st.markdown("""
-            <div class="glass-container">
-                <h3>Recomendaciones</h3>
-                <p>Basadas en el análisis de datos:</p>
-                <ul>
-                    <li>Recomendaciones para clubes</li>
-                    <li>Estrategias de inversión</li>
-                    <li>Oportunidades de mercado</li>
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
 
-else:  # Conclusiones
-    st.title("Conclusiones")
-    
     with st.container():
         st.markdown("""
         <div class="glass-container">
-            <h3>Principales Hallazgos:</h3>
+            <h3>Principales Hallazgos</h3>
+            <p>El análisis de los valores de mercado ha permitido identificar fluctuaciones
+            significativas en base al rendimiento de los jugadores y eventos globales que afectan la industria.</p>
             <ul>
-                <li>El análisis de datos en el fútbol ofrece insights valiosos para la toma de decisiones</li>
-                <li>Las tendencias del mercado muestran patrones significativos en la valoración de jugadores</li>
-                <li>La gestión basada en datos puede mejorar significativamente las estrategias de los equipos</li>
+                <li>Jugadores jóvenes tienden a incrementar su valor con mayor rapidez.</li>
+                <li>El rendimiento en torneos importantes impacta directamente en el valor de mercado.</li>
+                <li>Factores externos como lesiones o transferencias afectan considerablemente las evaluaciones.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
-# Footer mejorado
-with st.sidebar:
-    st.markdown("---")
-    st.markdown("""
+elif menu_principal == "Conclusiones":
+    st.title("Conclusiones")
+
+    with st.container():
+        st.markdown("""
         <div class="glass-container">
-            <small>ANÁLISIS DE LAS ESTADÍSTICAS QUE TIENEN MAYOR CORRELACIÓN 
-            CON EL VALOR DE MERCADO DE LOS JUGADORES DE FUTBOL EN ESPAÑA</small>
+            <h3>Resumen de Conclusiones</h3>
+            <p>La evaluación del valor de mercado en el fútbol es una herramienta clave 
+            para la toma de decisiones estratégicas en la industria deportiva.</p>
+            <ul>
+                <li>El análisis de datos históricos y actuales permite realizar proyecciones más precisas.</li>
+                <li>Las visualizaciones interactivas facilitan la comunicación de insights.</li>
+                <li>La tecnología es fundamental para optimizar el análisis de grandes volúmenes de datos.</li>
+            </ul>
         </div>
         """, unsafe_allow_html=True)
+
+# Footer
+st.markdown("""
+    <hr>
+    <footer style="text-align: center; color: white;">
+        <p>Desarrollado por el equipo de análisis ⚽ | 2024</p>
+    </footer>
+""", unsafe_allow_html=True)
+
